@@ -1,0 +1,45 @@
+Course Curriculum Overview 
+    01 - PostgreSQL Installation
+    02 - Databases and Tables Basics
+    03 - SQL Statement Fundamentals
+    04 - GROUP BY Clause
+    05 - Assesment Test 1
+    06 - JOINS
+    07 - Advanced SQL Commands
+    08 - Assesment Test 2
+    09 - Create Databases and Tables
+    10 - Assesment Test 3
+    11 - Extra Lectures
+
+Database Overview
+
+What are Databases?
+    Databases are systems that allow users to store and organize data. They are useful when dealing with large amounts of data.
+Why use Databases?
+    Data Integrity
+    Can handle massive amounts of data
+    Quickly combine different datasets
+    Automate steps for re-use
+    Can support data for website and applications
+
+Typical users
+    Databases have a wide variety of users!
+    Analysts
+        Marketing
+        Business
+        Sales
+    Technical
+        Data Scientist
+        Software Engineers
+        Web Developers
+    Anyone needing to deail with data.
+
+SQL
+Structured Query Language is a programming language used to communicate with relational databases. It's a greate tool to make use of a variety of databases.
+example:
+    SELECT customer_id, first_name, last_name
+    FROM sales
+    ORDER BY first_name
+
+Full Documentation
+https://www.postgresql.org/docs/current/index.html
