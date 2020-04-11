@@ -1,0 +1,181 @@
+SELECT Statement
+Allows us to retrieve information from a table. It has many clauses that you can combine to form a powerful query.
+
+What is a SQL clause?
+In general terms, a clause is an optional chunk of an SQL statement.
+
+Syntax:
+    SELECT column_name FROM table_name
+
+* Specific queries shoulb be preferd over general ones. Querying increases traffic between a database server and an application, slowing down the retrieval of results.
+
+SELECT Clause
+    DISTINCT => Select distinct rows
+    WHERE => Filter rows
+    ORDER BY => Sort rows
+    BETWEEN, IN and LIKE => Select rows operators
+    GROUP BY => Group rows into groups
+    HAVING => Apply condition for groups
+    INNER JOIN, LEFT JOIN, RIGHT JOIN => Join to another table
+    LIMIT => Limit the number of rows returned by the query
+
+
+DISTINCT
+The D​ISTINCT​ clause is used to remove duplicate rows from a result set. The D​ISTINCT​ clause keeps one row for each group of duplicates. You can use the D​ISTINCT​ clause on one or more columns of a table.
+Syntax:
+    SELECT DISTINCT column_name
+Example:
+    SELECT DISTINCT column_name FROM table_name;
+
+DISTINCT ON (expression)
+PostgreSQL provides the D​ISTINCT ON​(expression) to keep the “first” row of each group of duplicates where the expression is equal. 
+Syntax:
+    SELECT DISTINCT ON (column_name1), column_name2
+Example:
+    SELECT DISTINCT ON (column_name1), column_name2 FROM table_name ORDER BY column_name1, column_name2
+The order of rows returned is unpredictable, It is good practice also use the ORDER BY clause with the DISTINCT ON (expression) to make the result obvious.
+*  The D​ISTINCT ON ​expression must match the leftmost expression in the ORDER BY ​clause.
+
+WHERE
+The WHERE clause is a filter that defines the conditions each row in the source tables must meet to qualify for the SELECT. Only rows that meet the conditions contribute data to the result set. Data from rows that do not meet the conditions is not used.
+Syntax:
+    WHERE search_condition
+Example:
+    SELECT column_name1, column_name2 FROM table_name WHERE column_name1=condition1 AND column_name2=condition2
+
+---- START OR OPERATORS ----
+PostgreSQL provides various standard operators to construct search condition.
+
+Comparison operators:
+Compare a column value to something.
+    =   => equal
+    >   => greater than
+    <   => less than
+    >=  => greather than or equal
+    <=  => less than or equal
+    <>  => not equal 
+    !=  => not equal
+
+Logical operators:
+Allow us to combine multiple comparison operators.
+    AND
+    OR
+    NOT
+
+Range Operator:
+The BETWEEN operator allows to match a value against a range of values. 
+Syntax:
+    value BETWEEN low AND high
+Example: 
+    SELECT column_name FROM table_name WHERE amount BETWEEN 0 AND 1
+* If the value is greater than or equal to the low value and less than or equal to the high value, the expression returns true, else false.
+
+The same condition can be expresed with another combiantion of operators, example:
+    value >= low AND value <= high
+
+If we want to check if a value is out of a range, we use the N​OT BETWEEN ​operator.
+Syntax:
+    value NOT BETWEEN low AND high;
+Example:
+    SELECT column_name FROM table_name WHERE amount NOT BETWEEN 5 AND 10
+* The exaluation of the expr ession is the same as with BETWEEN but the result is inverted.
+
+The same condition can be expresed with another combiantion of operators, example:
+    value < low AND value > high
+
+* When using the operator with dates be sure to use the ISO format for the date of the query: 
+    Syntax:
+        YEAR-MONTH-DAY
+    Example:
+        2020-01-30
+The end dates of high value are not included. If the query is between 2020-01-01 and 2020-01-30, the values for 2020-01-30 won't be included.
+
+List operator:
+The IN operator is used to check if a value matches any value in a list of values.
+Syntax:
+    value IN (value1,value2,...)
+* The expression returns true if the value matches any value in the provided list. 
+Example: 
+    SELECT * FROM table_1 WHERE name IN ('Dany', 'Any', 'Camy');
+    SELECT * FROM table_1 WHERE name IN (SELECT value FROM table_2);
+* The statement inside the parentheses is called a subquery, which is a nested query.
+
+You can combine the I​N ​operator with the N​OT ​operator to select rows whose values do not match the values in the list.
+
+Pattern Operator:
+The LIKE operator allows us to query values that match a given pattern.
+Syntax:
+    value LIKE pattern
+Example:
+    SELECT * FROM table_name WHERE name LIKE 'Tom%'
+* The query returns rows whose values in the name column begin with Tom a​nd may be followed by any sequence of characters. This technique is called pattern matching.
+
+You construct a pattern by combining a string with a wildcard characters. Wildcard characters:
+    %  => for matching any sequence of characters.
+    _  => ​for matching any single character.
+
+You can alse construct patterns using regex, https://www.postgresql.org/docs/12/functions-matching.html
+
+LIKE pattern matching is case sensitive, to make case case insensitive matches use ILIKE.
+
+---- END OF OPERATORS ----
+ORDER BY
+* When you query data from a table, PostgreSQL returns the rows in the order that they were inserted into the table. 
+The ORDER BY clause defines the order, ascending or descending,  in which the rows in the result set are sorted. order_list specifies the result set columns that make up the sort list. The ASC and DESC keywords are used to specify if the rows are sorted in an ascending or descending sequence.
+Syntax: 
+    ORDER BY order_list[ ASC | DESC ]
+Example:
+    SELECT * FROM table_name ORDER BY column_name
+    SELECT column_name, column_name2 FROM table_name ORDER BY column_name DESC, column_name2 ASC
+* Ascending is default
+
+GROUP BY
+The GROUP BY clause partitions the result set into groups based on the values in the columns of the group_by_list. 
+Syntax:
+    GROUP BY group_by_expression
+Example:
+    SELECT column_name FROM table_name GROUP BY column_name
+
+* While using the GROUP By clause the select_list of the query should contain only the following: 
+    Group Functions or Aggregate Functions
+    Columns used in the Group By Clause
+    Constants
+
+HAVING
+The HAVING clause is an additional filter that is applied to the result set. Logically, the HAVING clause filters rows from the intermediate result set built from applying any FROM, WHERE, or GROUP BY clauses in the SELECT statement. HAVING clauses are typically used with a GROUP BY clause.
+Syntax:
+    HAVING search_condition
+Example:
+	SELECT column_name FROM table_name WHERE search_condition GROUP BY group_by_expression HAVING search_condition
+
+INNER JOIN, LEFT JOIN, RIGHT JOIN
+Join to another table
+
+LIMIT
+PostgreSQL LIMIT is used in the SELECT statement to get a subset of rows returned by the query. 
+Syntax:
+    LIMIT n
+Where:
+    n is a numeric value. If zero or N​ULL, the L​IMIT​ clause is omitted.
+Example
+    SELECT * FROM table_name LIMIT n;
+* Because the order of the rows in the database table is unknown and unpredictable, when you use the L​IMIT​ clause, you should always use the O​RDER BY ​clause to control the order of rows. If you don’t do so, you will get an unpredictable result.
+
+O​FFSET
+In case you want to skip a number of rows before returning n​​ rows, you use O​FFSET clause after the L​IMIT​ clause.
+Syntax:
+    OFFSET m
+Where:
+    m is a numeric value. If zero or N​ULL, the OFFSET clause is omitted.
+Example:
+    SELECT * FROM table_name LIMIT n OFFSET m;
+
+Functions
+COUNT
+The COUNT function returns the number of input rows that match a specific condition of a query. We can apply COUNT on a specific column or just pass COUNT(*).
+Syntax:
+    COUNT(expression)
+Example:
+    SELECT COUNT(*) FROM table_name;
+    SELECT COUNT(DISTINCT column_name) FROM table_name;
+
