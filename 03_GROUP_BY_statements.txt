@@ -1,0 +1,52 @@
+Aggregate Functions
+SQL provides a variety of aggregate functions. Aggregate functions compute a single result from a set of input values.
+
+Documentation: https://www.postgresql.org/docs/12/functions-aggregate.html
+General-Purpose Aggregate Functions Table: https://www.postgresql.org/docs/12/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+Aggregate Functions for Statistics Table: https://www.postgresql.org/docs/12/functions-aggregate.html#FUNCTIONS-AGGREGATE-STATISTICS-TABLE
+
+Most Common Aggregate Functions:
+	AVG() 	returns average floating point value
+	COUNT() returns number of values
+	MAX() 	returns maximum value
+	MIN() 	returns minimum value
+	SUM() 	returns the sum of all values
+	ROUND() returns a value rounded to the specified precision
+	DATE()  returns yyyy/mm/dd from an iso date
+
+Aggregate function calls happen only in the SELECT clause or the HAVING clause.
+
+SUM function
+Is an aggregate function that calculates the sum of all or distinct values in an expression.
+Syntax:
+	SUM([ALL | DISTINCT ] expression)
+Where:
+	ALL instructs the SUM() function to return the sum of all values including 	duplicates. ALL is used by default.
+	DISTINCT instructs the SUM() function to calculate the sum of the only distinct values.
+	expression is any valid expression that returns an exact or approximate numeric value. Note that aggregate functions or subqueries are not accepted in the expression.
+
+
+GROUP BY clause
+Allows us to aggregate columns per some category. 
+Divides the rows returned from the SELECT statement into groups. For each group, you can apply an aggregate function e.g., to calculate the sum of items or count the number of items in the groups.
+Syntax:
+	SELECT column_name_1, aggregate_function(column_name_2) FROM table_name GROUP BY column_name_1
+
+* The clause must appear right after the F​ROM​ or W​HERE ​clause. Followed by the G​ROUP BY​clause is one column, a list of comma ­separated columns or an expression. If a column is selected it must be included in the GROUP BY in other for the return value to make sense.
+
+To use GROUP BY we need to choose a categorical column, in other words the values of the column must be non-continuous.
+
+HAVING clause
+Often used in conjunction with the GROUP BY clause to filter group rows that do not satisfy a specified condition.
+Syntax:
+	SELECT column_name_1, aggregate_function(column_name_2) FROM table_name GROUP BY column_name_1 HAVING condition;
+
+The main difference between the HAVING and WHERE clauses:
+WHERE clause sets the condition for individual rows before G​ROUP BY ​clause.
+H​AVING c​lause sets the condition for group rows created by the G​ROUP BY​ clause.
+Order:
+	SELECT - FROM - WHERE - GROUP BY - HAVING
+Syntax:
+	SELECT column_name_1, SUM(column_name_2) FROM table_name GROUP BY column_name_1 HAVING SUM(column_name_2)
+
+In PostgreSQL, you can use the H​AVING c​lause without the G​ROUP BY ​clause. In this case, the H​AVING c​lause will turn the query into a single group. In addition, the SELECT l​ist and H​AVING c​lause can only refer to columns from within aggregate functions. This kind of query returns a single row if the condition in the H​AVING ​clause is true or zero row if it is false.
