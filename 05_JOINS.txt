@@ -1,0 +1,73 @@
+AS statement
+Renames a column or table with an alias. The alias only exists for the duration of the query and is executed at the very end of it, there for it can't be used for example inside WHERE. It's used to improve the readability of the output. 
+Syntax:
+    SELECT column_name_1 AS ID, colum_name_2 AS Name FROM table_name
+
+JOINS
+SQL is a special-purpose programming language designed for managing information in a - relational - database management system (RDBMS). The word relational here is key; it specifies that the database management system is organized in such a way that there are clear relations defined between different sets of data. 
+
+Primary keys (PK) and foreign keys (FK) are essential to describing relations between tables, and in performing SQL joins.
+
+Given two tables, each with a primary key and one of them with a foreign key which is also present in the other table as a primary key.
+
+We can JOIN the two tables using the keys.
+
+Syntax:
+    SELECT column_1_table_1, column_1_table_2 FROM table_1 JOIN table_2 ON table_1.column_2_table_1 = table_1.column_2_table_2;
+
+There are different ways to join tables together. There are four basic types of SQL joins: inner, left, right, and full.
+
+Let’s say we have two sets of data in our relational database: table A and table B, with some sort of relation specified by primary and foreign keys. 
+
+To records from table A and table B may overlap, if records match they can be related or joined.
+
+INNER JOIN
+Select all records from Table A and Table B, where the join condition is met. A INNER JOIN will result with the set of records that match in both tables.
+Syntax:
+    SELECT * FROM table_1 INNER JOIN table_2 ON table_1.column_1 = table_2.colum_name_2
+
+Getting from table_1 and inner joining with table_2, is the same as getting from table_2 and inner joining with table_1.
+
+Using just JOIN without the INNER, will result in PostgreSQL treating it as an INNER JOIN.
+
+Outer JOINS
+They allow us to specify how to deal with values only present in one of the tables being joined. These are the more complex JOINS.
+
+FULL OUTER JOIN
+Select all records from Table A and Table B, regardless of whether the join condition is met or not. A FULL OUTER JOIN will result in a new list with all of the entries at each list even if not present at the other.
+Syntax:
+    SELECT * FROM table_1 FULL OUTER JOIN table_2 ON table_1.column_1 = table_2.colum_name_2
+
+Getting from table_1 and full outer joining with table_2, is the same as getting from table_2 and full outer joining with table_1.
+
+FULL OUTER JOIN with WHERE
+Get rows unique to either table, rows not found in both tables.
+Example:
+    SELECT * FROM table_1 FULL OUTER JOIN table_2 ON table_1.column_1 = table_2.column_2 WHERE table_1.id IS null OR table_2.id IS null
+
+When joining tables, the table that is getted will be at the left of the table that is joined. The table must be getted before being joined.
+
+LEFT OUTER JOIN
+Select all records from Table A, along with records from Table B for which the join condition is met (if at all). A LEFT OUTER JOIN will result in the entries that are in the left table or the one getted, if there is no match with the right table, the results are null.
+Example:
+    SELECT * FROM table_1 LEFT OUTER JOIN table_2 ON table_1.column_1 = table_2.column_2
+
+LEFT OUTER JOIN with WHERE
+Get rows unique to the left table, rows only found at the getted table.
+Example:
+    SELECT * FROM table_1 FULL OUTER JOIN table_2 ON table_1.column_1 = table_2.column_2 WHERE table_1.id IS null
+    
+RIGHT OUTER JOIN
+Select all records from Table B, along with records from Table A for which the join condition is met (if at all).
+
+A RIGHT OUTER JOIN will result in the entries that are in the right table or the one joined, if there is no match with the left table, the results are null.
+Example:
+    SELECT * FROM table_1 RIGHT OUTER JOIN table_2 ON table_1.column_1 = table_2.column_2
+
+RIGHT OUTER JOIN with WHERE
+Get rows unique to the left table, rows only found at the getted table.
+Example:
+    SELECT * FROM table_1 FULL OUTER JOIN table_2 ON table_1.column_1 = table_2.column_2 WHERE table_1.id IS null
+
+UNION
+The UNION operator is used to combine the result-set of two or more SELECT statemenets. It's used to concateneate two results, one after the other.
