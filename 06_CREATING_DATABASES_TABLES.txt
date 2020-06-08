@@ -1,0 +1,194 @@
+PRIMARY & FOREING KEY
+
+These are fundamental concepts necessary in order to create tables and sequel.
+
+PRIMARY KEY 
+A primary key is a column or a group of columns used to identify a row uniquely in a table. It is unique as in it's distinct for every row of a table and also non NULL which essentially means that every row must have an entry for that column.
+
+Primary keys are also important since they allow us to easily discern what columns should be used for joining tables together.
+
+In pgadmin, when you grab a table information it will tell you if a column is a primary key for that table by specifying P.K. or primary key.
+
+FOREING KEY
+
+A foreign key is a column or group of columns in a table that uniquely identifies a row in another table. 
+
+A foreign key is defined in a table that references to the primary key of the other table. 
+
+The table that contains the foreign key is called "referencing table" or "child table".
+
+The table to which the foreign key references is called "reference table" or a "parent table". 
+
+A table can have multiple foreign keys depending on its relationships with other tables.
+
+The primary key and a foreign key typically make good column choices for joining together two or more tables when creating tables and defining columns. 
+
+We can use constraints to define columns as being a primary key or attaching a foreign key relationship to another table.
+
+The way you actually define Primary Key and Foreign Key is by setting them up as a constraint.
+
+How can we see the dependencies?
+
+At pgadmin there is a button Dependencies and Dependents.
+
+
+CONSTRAINTS
+Constraints are the rules enforced on data columns on a table that can also be used to constrain everything in a table.
+
+Constraints are used to prevent invalid data from being entered into the database.
+
+This ensures the accuracy and reliability of the data in the database. 
+
+Constraints can generally be divided in two main categories.
+
+    Constraints on columns: Constrains the data in a single column to adhere to certain conditions.
+
+    Table constraints: Are applied to the entire table rather to just an individual column. 
+
+Some of the most common collumn constraints keywords: 
+    NOT NULL => A column cannot have a null value, essentially saying its required. Otherwise it's an invalid row and it won't let you add it to the table.
+
+    UNIQUE => Ensures all values in a column are distinct or different.
+
+    PRIMARY key => Uniquely identifies each row or record in the database table.
+    
+    FOREING key => A foreign key constraints data based on columns on other tables. When you're setting up a foreign key, you will set up a relationship to another table you created.
+
+    CHECK => Ensures that all values in a column satisfy just some certain general condition. Values are checked against some conditions.
+    
+    EXCLUSION => Ensures that if any two rows are compared on the specified column or expression, using the specified operator, that not all of these comparisons will return true.
+
+You can also apply constraints across an entire table:
+
+
+    CHECK (condition) => to check a condition when inserting or updating data.
+
+    REFERENCES => to constrain the value stored in the column that must exist in a column in another table.
+    
+    
+CREATE keyword
+
+syntax: CREATE TABLE table_name (column_name TYPE column_constraint, column_name TYPE column_constraint, table_constraint table_constraint
+) INHERIT existing_table_name;
+
+* INHERIT: In case you have some sort of relationship to another table and you can inherit from an existing table.
+
+
+INSERT clause
+
+Insert allows you to add in or insert rows into a table.
+
+syntax:
+    INSERT INTO table_name(column_name,...) 
+    VALUES 
+    (value1,...),
+    (value2,...),
+    ...;
+
+You can also have a syntax for inserting values from another table:
+
+    INSERT INTO table_name (column_name, ...) 
+    SELECT column_name, ... 
+    FROM other_table_name 
+    WHERE condition;
+
+So something to keep in mind, especially for the previous statement of inserting from another table, the inserted row values must match up for the table including constraints.
+
+
+UPDATE clause
+
+Update allows changing the values of columns in the table. 
+
+syntax:
+    UPDATE table_name
+    SET column_name=value;
+
+We can also specify conditions for where the update should occur.
+
+syntax:
+    UPDATE table_name
+    SET column_name=value
+    WHERE condition;
+
+We can alse use anothers table value.
+
+syntax:
+    UPDATE table_name
+    SET column_name=value
+    FROM other_table_name
+    WHERE condition;
+
+If you run a update clause you don't see any results, if you do want to see particular columns you can set the RETURNING clause:
+
+syntax:
+    UPDATE table_name
+    SET column_name=value;
+    RETURNING column_name, ...
+
+
+DELETE clause
+We can use the delete to remove rows from a table.
+
+syntax:
+    DELETE FROM table_name WHERE condition;
+
+It's fundamental to use the WHERE, without it you would delete all table rows.
+
+
+ALTER clause
+Allows for changes to an existing table structure, such as:
+    - Adding, dropping, or renaming columns.
+    - Changing a column's data type.
+    - Set DEFAULT values for a column.
+    - Add CHECK constraints.
+    - Rename table.
+
+syntax:
+    ALTER TABLE table_name action;
+
+Adding Columns:
+    ALTER TABLE table_name ADD COLUMN column_name TYPE;
+
+Removing Columns:
+    ALTER TABLE table_name DROP COLUMN column_name TYPE;
+
+Alter constraints:
+    add constraint:
+        ALTER TABLE table_name 
+        ALTER COLUMN column_name
+        ADD CONSTRAINT constraint;
+
+    set constraint:
+        ALTER TABLE table_name 
+        ALTER COLUMN column_name
+        SET constraint;
+
+    drop constraint:
+        ALTER TABLE table_name 
+        ALTER COLUMN column_name
+        DROP constraint;
+
+
+DROP clause
+drop allows us to completely remove a column from a table in progres.
+
+This also automatically removes all of its indexes and constraints involving the column. It will remove things like check constraints, not null constraints, unique constraints, everything that's associated with that column.
+
+However what it does not do is, it does not remove columns used on other things that are dependent on it such as views triggers or stored procedures.
+
+If you do want to remove a column that has those dependencies for views triggers and sort of procedures you can add in an additional cascade clause in order to just remove that column and those associated dependencies.
+
+syntax:
+    ALTER TABLE table_name
+    DROP COLUMN column_name;
+
+
+CHECK constraint
+The check constraint allows us to create customized constraints that adhere to a our specified condition.
+
+syntax:
+    CREATE TABLE table_name(
+        column_name_1 TYPE constraint,
+        column_name_2 TYPE CHECK (column_name_2 custom_constraint),
+        ...
+        );
